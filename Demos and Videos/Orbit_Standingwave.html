@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <script type="text/javascript">
+var tt= setInterval(function() {StandWave(40)},100);
+var timecount = 0;
+  function cwl(){
+clearr();
+}
+      
+
+
+function clearr(){
+var canvas = document.getElementById('a');
+        if (canvas.getContext){
+          var ctx = canvas.getContext('2d');
+ ctx.clearRect(0,0,400,400);
+//ctx.fillStyle = "#ffffff";
+  //      ctx.fillRect (0, 0, 300, 250);
+    //    ctx.stroke();
+}}
+
+ function StandWave(x){
+ var canvas = document.getElementById('a');
+ var nw = document.getElementById("numwave").value;
+var rw =20+nw*5;
+
+ if (canvas.getContext){
+          var ctx = canvas.getContext('2d');
+//if (x=0) {ctx.clearRect(0,0,300,225)}
+clearr();
+ctx.lineWidth = 2;
+drawcircle(rw);
+ctx.strokeStyle = '#00cc33';
+ctx.beginPath();
+
+ctx.moveTo(100-rw,100);
+for (y=0; y < 361; y++){
+
+ 
+var radii = rw+rw/5*Math.sin(2*Math.PI/20*timecount)*Math.sin(nw*y/180*Math.PI);
+   
+    // ctx.lineTo(x+y,100+radii);
+        ctx.lineTo(100-radii*Math.cos(y/180*Math.PI),100+radii*Math.sin(y/180*Math.PI));
+ }
+ ctx.stroke();
+timecount ++
+       
+
+ }}
+function startstop(x){
+
+ tt = setInterval(function() {electron(1)},100);
+timeon = 1;
+}
+function drawcircle(x){
+        var canvas = document.getElementById('a');
+        if (canvas.getContext){
+var ctx = canvas.getContext('2d');
+ ctx.beginPath();
+ ctx.strokeStyle ="#ff9933";
+ctx.moveTo(100-x,100);
+for (y=0; y < 362; y++){
+
+     ctx.lineTo(100-x*Math.cos(y/180*Math.PI),100+x*Math.sin(y/180*Math.PI));
+ }
+
+ ctx.stroke();
+      }    }
+    </script>
+</head>
+<body >
+
+<h1>Orbital Standing Waves</h1>
+<table>
+<tr>
+<td>
+<canvas id = "a" width="200" height="200"></canvas>
+<td>
+</tr>
+<tr>
+<td align="center">
+Number of Waves
+<br><input id="numwave" type="range" max="10" min = "1" value=""4">
+</td>
+</tr>
+</table>
+</body>
+</html> 

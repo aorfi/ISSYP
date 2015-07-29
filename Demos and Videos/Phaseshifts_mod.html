@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+#Waveone
+{position:absolute;
+top:75px;
+left:450px;
+background-color:#ffffff;
+}
+#Wavetwo
+{position:absolute;
+top:250px;
+left:450px;
+background-color:#ffffff;
+}
+#Wavesum
+{position:absolute;
+top:425px;
+left:450px;
+background-color:#ffffff;
+}
+</style>
+ <script type="text/javascript">
+//var tt= setInterval(function() {StandWave(40)},100);
+var timecount = 0;
+//scale of amplitude
+VScale=1;
+// width of canvas;
+var canWidth=200;
+// height of canvas
+var canHeight=600;
+//set wave colour here[top,middle,bottom]
+var waveCol=["#FF0066","#00CC33","#000000"];
+//position of each wave
+var wavePos=[50,200,400];
+
+  function cwl(){
+clearr();
+}
+      
+
+
+function clearr(){
+var canvas = document.getElementById('a');
+        if (canvas.getContext){
+          var ctx = canvas.getContext('2d');
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+
+}}
+
+ function StandWave(x){
+ var canvas = document.getElementById('a');
+var rw =40;
+var wave1=[];
+var wave2=[];
+var wave3=[];
+var wl1 = +document.getElementById("lengthone").value;
+var a1 = +document.getElementById("Ampone").value;
+var p1 = +document.getElementById("phaseone").value;
+var wl2 = +document.getElementById("lengthtwo").value;
+var a2 = +document.getElementById("Amptwo").value;
+var p2 = +document.getElementById("phasetwo").value;
+var qq;
+ if (canvas.getContext){
+          var ctx = canvas.getContext('2d');
+//if (x=0) {ctx.clearRect(0,0,300,225)}
+clearr();
+//drawcircle(rw);
+for (z=0;z<3;z++){
+ctx.beginPath();
+ctx.moveTo(0,wavePos[z]);
+ctx.lineTo(canvas.width,wavePos[z]);
+ctx.strokeStyle="#aaaaaa";
+ctx.lineWidth=1;
+ctx.stroke();}
+for (y=0; y < canWidth; y++){
+wave1[y]=a1*Math.sin((y/wl1-p1/360)*2*Math.PI);
+wave2[y]=a2*Math.sin((y/wl2-p2/360)*2*Math.PI);
+wave3[y]=wave2[y]+wave1[y];
+}
+ctx.lineWidth=3;
+ctx.strokeStyle = '#000000';
+for (z=0;z<3;z++){
+ctx.beginPath();
+if (z==0) {qq=wave1[0];}
+else if (z==1) {qq=wave2[0];}
+else {qq=wave3[0];}
+
+ctx.moveTo(10,wavePos[z]-VScale*qq);
+for (y=0; y < canWidth; y++){
+ctx.strokeStyle=waveCol[z];
+if (z==0) {qq=wave1[y];}
+else if (z==1) {qq=wave2[y];}
+else {qq=wave3[y];}
+    ctx.lineTo(10+y,wavePos[z]-VScale*qq);
+   
+ }
+ ctx.stroke();
+ var vertLine=+document.getElementById('waveTotal').value+10;
+  ctx.beginPath();
+ctx.moveTo(vertLine,0);
+ctx.lineTo(vertLine,canvas.height);
+
+ctx.strokeStyle = '#cccccc';
+ ctx.stroke();
+ document.getElementById('w1prop').innerHTML='Amplitude = '+ (a1).toString()+
+'  '+'     Wavelength = '+ (wl1).toString()+'  '+'     Phase = '+ (p1).toString()+'\xBA';
+ document.getElementById('w2prop').innerHTML='Amplitude = '+ (a2).toString()+
+'  '+'  Wavelength = '+ (wl2).toString()+'  '+'  Phase = '+ (p2).toString()+'\xBA';
+ document.getElementById('sumData').innerHTML='Wave 1 Amplitude = '+ (Math.floor(wave1[vertLine-10]*10)/10).toString()+
+'<br />'+'Wave 2 Amplitude = '+ (Math.floor(wave2[vertLine-10]*10)/10).toString();
+var ttttt=Math.floor(wave1[vertLine-10]*10)/10+Math.floor(wave2[vertLine-10]*10)/10;
+document.getElementById('sumData').innerHTML=document.getElementById('sumData').innerHTML+'<br />'+'Resultant Amplitude ='+(Math.floor(ttttt*10)/10).toString();
+//'Total Amp= '+ (Math.floor(wave1[vertLine]*10)/10+Math.floor(wave2[vertLine]*10)/10).toString()+;
+ 
+}
+//timecount ++
+       
+
+ }}
+function init(){
+var canvas = document.getElementById('a');
+canvas.width=canWidth;
+canvas.height = canHeight;
+document.getElementById('waveTotal').max=canWidth-10;
+StandWave(40);
+document.getElementById('Waveone').style.color = waveCol[0];
+
+document.getElementById('Wavetwo').style.color = waveCol[1];
+document.getElementById('Waveone').style.left = (canvas.width+20).toString()+'px';
+document.getElementById('Wavetwo').style.left = (canvas.width+20).toString()+'px';
+document.getElementById('Wavesum').style.left = (canvas.width+20).toString()+'px';
+}
+function drawcircle(x){
+        var canvas = document.getElementById('a');
+        if (canvas.getContext){
+var ctx = canvas.getContext('2d');
+ ctx.beginPath();
+ctx.moveTo(200-x,200);
+for (y=0; y < 362; y++){
+
+     ctx.lineTo(200-x*Math.cos(y/180*Math.PI),200+x*Math.sin(y/180*Math.PI));
+ }
+ctx.strokeStyle = '#cccccc';
+ ctx.stroke();
+      }    }
+    </script>
+</head>
+<body onload="init()">
+
+<h1>Make your own waves and interference patterns!</h1>
+
+<br>
+
+
+<canvas id = "a" width="300" height="400"></canvas>
+<br>
+<br>
+<div id="Waveone"><b>Wave 1</b><br>
+<p id='w1prop'></p>
+Amplitude<input id="Ampone" type="range" value="40" min="0" max="50" onchange="StandWave()"><br>
+Wavelength<input id="lengthone" type="range" value="60" min="10" max="100" onchange="StandWave()"><br>
+Phase <input id="phaseone" type="range" value="0" min="0" max="360" onchange="StandWave()"><br>
+
+</div>
+<div id="Wavetwo" style="color:#0000FF"><b>Wave 2</b><br>
+<p id='w2prop'></p>
+Amplitude<input id="Amptwo" type="range" value="40" min="0" max="50" onchange="StandWave()"><br>
+Wavelength<input id="lengthtwo" type="range" value="60" min="10" max="100" onchange="StandWave()"><br>
+Phase <input id="phasetwo" type="range" value="0" min="0" max="360" onchange="StandWave()"><br>
+
+</div>
+<div id="Wavesum" style="color:#000000"><b>Resultant Wave</B><br>
+Measure amplitude by sliding slider <input id="waveTotal" type="range" value="0" min="0" max="400" onchange="StandWave()"><br>
+<p id="sumData"></p>
+</body>
+</html> 
